@@ -1,0 +1,75 @@
+// Creates a new django project 
+django-admin startproject {projectname}
+
+// Run our Djangoapp
+python manage.py runserver
+
+-----------
+// Applications and Routes
+Projects - Consists of Apps (Website)
+Apps - An application that does a single thing (submodule)
+     - You could add apps to other projects without any difficulty
+
+// Create an app inside a project
+python manage.py startapp blog
+
+// Creating views
+1. Open views.py inside the newly created app
+2. Add a new function in views.py
+
+    def home(request):
+        return HttpResponse('<h1>Blog Home</h1>')
+
+3. Add the new route(function from views.py) in urls.py (create the urls.py) 
+    from django.urls import path
+    from . import views
+
+    urlpatterns = [
+        # route, function, name
+        path('', views.home, name="blog-home"),
+    ]
+
+4. Add the blog.urls to project.urls 'urlpatterns'
+    
+    ```urls.py
+    path('', include("blog.urls"))
+    ```
+
+5. Create a new view and add the route in the urls.py (inside the blog app)
+
+    ```blog/views.py
+    def about(request):
+        return HttpResponse('<h1>Blog About</h1>')
+    ```
+
+    ```blog/urls.py
+    from django.urls import path
+    from . import views
+
+    urlpatterns = [
+        # route, function, name
+        path('', views.home, name="blog-home"),
+        path('about/', views.about, name="blog-about")
+    ]
+    ```
+
+-----------------------------------
+// Templates
+// Allows us to return HTML files in views
+
+// Setting up
+1. Create a 'templates' inside the blog app, we will use this to store our web files (html, css, js)
+2. Inside the templates folder, name it blog (the name of the app.)
+    'blog/templates/blog/'
+3. We have to add the blog application in the list of installed apps in our projects (so that django knows to look there for templates directory)
+4. Add apps.py config to project.settings (BlogConfig)
+    'blog.apps.BlogConfig'
+5. We must always add applications in our project.settings.
+
+// Opening HTML files using templates
+1. Inside views, import render from django.shortcuts
+2. Change the views.home function:
+    def home(request):    
+        return render(request, 'blog/home.html')
+3. There is also another (3rd) parameter which is the context which allows us to pass data inside the html template.
+4. 
